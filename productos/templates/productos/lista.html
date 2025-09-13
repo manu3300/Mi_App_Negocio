@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ titulo }}</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        .product-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        .product-card-body {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        .product-card h2 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        .product-card p {
+            font-size: 1rem;
+            color: #7f8c8d;
+            margin: 5px 0;
+        }
+        .product-card .price {
+            font-weight: bold;
+            color: #3498db;
+            font-size: 1.2rem;
+            margin-top: auto; /* Empuja el precio hacia la parte inferior */
+        }
+        h1 {
+            text-align: center;
+            color: #34495e;
+            margin-bottom: 40px;
+        }
+        .no-products {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #c0392b;
+            grid-column: 1 / -1; /* Centra el mensaje en la cuadrícula */
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ titulo }}</h1>
+    
+    <div class="container">
+        {% for producto in lista_de_productos %}
+            <a href="{% url 'detalle_producto' producto.id %}" class="product-card">
+                <div class="product-card-body">
+                    <h2>{{ producto.nombre }}</h2>
+                    <p>Categoría: {{ producto.categoria }}</p>
+
+                    {% with primera_variacion=producto.variaciones.first %}
+                        {% if primera_variacion %}
+                            <p class="price">Precio: ${{ primera_variacion.precio_venta }}</p>
+                            <p>Stock: {{ primera_variacion.stock }} unidades</p>
+                        {% else %}
+                            <p class="price">Precio: N/A</p>
+                            <p>Stock: 0 unidades</p>
+                        {% endif %}
+                    {% endwith %}
+                </div>
+            </a>
+        {% empty %}
+            <p class="no-products">No hay productos disponibles en este momento.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>

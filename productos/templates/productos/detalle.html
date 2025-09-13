@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ producto.nombre }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .product-info {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .product-info p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        .product-info strong {
+            color: #34495e;
+        }
+        .variations-section {
+            margin-top: 40px;
+        }
+        .variations-section h2 {
+            color: #3498db;
+            font-size: 1.4rem;
+            border-bottom: 1px solid #bdc3c7;
+            padding-bottom: 5px;
+        }
+        .variation-card {
+            background-color: #ecf0f1;
+            border-left: 5px solid #3498db;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        .variation-card p {
+            margin: 5px 0;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            color: #3498db;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ producto.nombre }}</h1>
+        
+        <div class="product-info">
+            <p><strong>Descripción:</strong> {{ producto.descripcion }}</p>
+            <p><strong>Categoría:</strong> {{ producto.categoria }}</p>
+            <p><strong>Marca:</strong> {{ producto.marca }}</p>
+            <p><strong>Condición:</strong> {{ producto.condicion }}</p>
+            <p><strong>Estado:</strong> {{ producto.estado }}</p>
+            <p><strong>SKU:</strong> {{ producto.sku|default:"N/A" }}</p>
+        </div>
+        
+        <div class="variations-section">
+            <h2>Variaciones disponibles:</h2>
+            {% for variacion in variaciones %}
+                <div class="variation-card">
+                    <p><strong>Variación:</strong> {{ variacion.nombre }}</p>
+                    {% comment %} <p><strong>Precio de Compra:</strong> ${{ variacion.compra.precio_compra }}</p> {% endcomment %}
+                    <p><strong>Precio de Venta:</strong> ${{ variacion.precio_venta }}</p>
+                    <p><strong>Stock:</strong> {{ variacion.stock }} unidades</p>
+                </div>
+            {% empty %}
+                <p>Este producto no tiene variaciones disponibles.</p>
+            {% endfor %}
+        </div>
+        
+        <a href="{% url 'lista_productos' %}" class="back-link">← Volver a la lista de productos</a>
+    </div>
+</body>
+</html>

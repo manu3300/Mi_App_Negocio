@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ titulo }}</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .form-container {
+            width: 100%;
+            max-width: 800px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            box-sizing: border-box;
+        }
+        h1 {
+            text-align: center;
+            color: #34495e;
+            margin-bottom: 30px;
+        }
+        form p {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input[type="text"], input[type="number"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+        textarea {
+            resize: vertical;
+        }
+        h2 {
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            display: flex; /* Permite alinear el título y el botón */
+            justify-content: space-between;
+            align-items: center;
+        }
+        .variation-form-box {
+            border: 1px solid #bdc3c7;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+        }
+        .atributos-checkbox-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 10px 0;
+        }
+        .atributos-checkbox-list input[type="checkbox"] {
+            margin-right: 5px;
+        }
+        .atributos-checkbox-list label {
+            display: inline-flex;
+            align-items: center;
+            font-weight: normal;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #3498db;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .btn-link {
+            font-size: 0.9em;
+            padding: 5px 10px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .btn-link:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>{{ titulo }}</h1>
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="main-form-section">
+                {{ form.as_p }}
+            </div>
+            
+            <h2>
+                <span>Variaciones</span>
+                <a href="{% url 'gestionar_atributos' %}" class="btn-link">Añadir Atributos</a>
+            </h2>
+            {{ formset.management_form }}
+            {% for form_variacion in formset %}
+                <div class="variation-form-box">
+                    <h3>Variación #{{ forloop.counter }}</h3>
+                    {% for field in form_variacion %}
+                        {% if field.label == 'Atributos de la variación' %}
+                            <p>
+                                <label>{{ field.label }}</label>
+                                <div class="atributos-checkbox-list">
+                                    {{ field }}
+                                </div>
+                            </p>
+                        {% else %}
+                            <p>
+                                <label>{{ field.label }}</label>
+                                {{ field }}
+                            </p>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            
+            <button type="submit">Guardar Producto</button>
+        </form>
+    </div>
+</body>
+</html>
