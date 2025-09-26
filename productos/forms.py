@@ -1,12 +1,10 @@
-# En productos/forms.py
-
 from django import forms
-from .models import Producto, VariacionProducto, Atributo, ValorAtributo
+from .models import Producto, VariacionProducto, Atributo, ValorAtributo, Subcategoria
 
 class ProductoForm(forms.ModelForm):
     class Meta:
         model = Producto
-        fields = ['nombre', 'descripcion', 'categoria', 'marca', 'condicion', 'estado', 'sku']
+        fields = ['nombre', 'descripcion', 'categoria', 'subcategoria', 'marca', 'condicion', 'estado', 'sku']
 
 class VariacionProductoForm(forms.ModelForm):
     atributos_seleccionados = forms.ModelMultipleChoiceField(
@@ -24,7 +22,9 @@ class VariacionProductoForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['atributos_seleccionados'].queryset = ValorAtributo.objects.all()
 
-VariacionProductoFormset = forms.inlineformset_factory(
+from django.forms import inlineformset_factory
+
+VariacionProductoFormset = inlineformset_factory(
     Producto, 
     VariacionProducto, 
     form=VariacionProductoForm,
@@ -42,8 +42,7 @@ class ValorAtributoForm(forms.ModelForm):
         model = ValorAtributo
         fields = ['atributo', 'valor']
 
-# Aquí está la corrección: se elimina el argumento 'prefix'
-ValorAtributoFormset = forms.inlineformset_factory(
+ValorAtributoFormset = inlineformset_factory(
     Atributo,
     ValorAtributo,
     form=ValorAtributoForm,
